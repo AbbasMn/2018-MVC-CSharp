@@ -1,0 +1,53 @@
+﻿
+@*
+    // MVC: Define related Models here for send them to smaller partial views
+
+    @model MVC.ViewModels.AttractionCustomers
+
+*@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+
+        @*
+        // MVC: we Move the <div class="navbar navbar-inverse navbar-fixed-top">
+                      ...
+                    <div>
+
+        to a partial View with the name: _NavBr
+
+        breaking down partial view to smaller partial viess
+
+        *@
+
+    @*@Html.Partial("_NavBar", Model.Attraction);*@
+
+        @Html.Partial("_NavBar");
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - World Attraction</p>
+        </footer>
+    </div>
+
+    
+    @*@Scripts.Render("~/bundles/bootstrap")*@
+
+    @Scripts.Render("~/bundles/jquery")
+
+    @Scripts.Render("~/bundles/lib")               @* // MVC: use a library scripts defind in App_Start/Bundle_config *@
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

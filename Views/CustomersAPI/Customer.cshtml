@@ -1,0 +1,99 @@
+﻿@model MVC.Models.Customer
+
+@{
+    ViewBag.Title = "CustomerAPI";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    <h4>Customer Details</h4>
+    <dl>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <br />
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Family)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Family)
+        </dd>
+
+        <br />
+
+        <dt>
+            MemberShip:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MembershipType.Name)
+        </dd>
+
+        <br />
+
+        <dt>
+            DiscountRate:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MembershipType.DiscountRate)%
+        </dd>
+
+        <br />
+
+        <dt>
+            DurationInMonths:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MembershipType.DurationInMonths)
+        </dd>
+
+        <br />
+
+        <dt>
+            SignUpFee:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MembershipType.SignUpFee)
+        </dd>
+
+        <br />
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsSubscribedToNewsletter)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsSubscribedToNewsletter)
+        </dd>
+
+        <br />
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Birthdate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Birthdate)
+        </dd>
+
+    </dl>
+</div>
+
+
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

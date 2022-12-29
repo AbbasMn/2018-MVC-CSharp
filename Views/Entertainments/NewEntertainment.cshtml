@@ -1,0 +1,238 @@
+﻿
+
+@model MVC.Models.Entertainment
+
+
+@{
+    ViewBag.Title = "NewEntertainment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Entertainment</h2>
+
+@using (Html.BeginForm("Create", "NewEntertainments"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Description)
+        @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Continent)      
+
+        @{
+            List<SelectListItem> continentItems = new List<SelectListItem>();
+            continentItems.Add(new SelectListItem
+            {
+                Text = "Africa",
+                Value = "Africa"
+            });
+
+            continentItems.Add(new SelectListItem
+            {
+                Text = "North America",
+                Value = "North America",
+                Selected = true
+            });
+
+            continentItems.Add(new SelectListItem
+            {
+                Text = "South America",
+                Value = "South America"
+            });
+
+            continentItems.Add(new SelectListItem
+            {
+                Text = "Asia",
+                Value = "Asia"
+            });
+
+            continentItems.Add(new SelectListItem
+            {
+                Text = "Antarctica",
+                Value = "Antarctica"
+            });
+
+            continentItems.Add(new SelectListItem
+            {
+                Text = "Australia",
+                Value = "Australia"
+            });
+
+            continentItems.Add(new SelectListItem
+            {
+                Text = "Europe",
+                Value = "Europe"
+            });
+
+        }
+
+
+        @*// MVC: sortDropDownListitems using LINQ *@
+        
+        @Html.DropDownListFor(m => m.Continent, continentItems.OrderBy(x => x.Value), new { @class = "form-control" })  
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Country)
+
+        @{
+            List<SelectListItem> countryItems = new List<SelectListItem>();
+        }
+
+        @Html.DropDownListFor(m => m.Country, countryItems, new { @class = "form-control" })  @* MVC: ,"-- Select Status --"*@
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.State)
+        @Html.TextBoxFor(m => m.State, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Type)
+        @Html.TextBoxFor(m => m.Type, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.DateAdded)
+        @Html.TextBoxFor(m => m.DateAdded, new { @class = "form-control" })
+    </div>
+
+ }
+
+
+
+
+    <script src="//code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            console.log($("#Continent :selected").text());
+            continentChange();
+      
+        });
+
+
+        // MVC: update continent countries after continent chenged
+        $("#Continent").change(continentChange);
+
+
+        // MVC: define function for update continent countries after continent chenged
+        function continentChange() {
+
+            var asia = {
+                val1: 'Iran',
+                val2: 'China',
+                val3: 'Iraq',
+                val4: 'Armenia',
+                val2: 'Georgia'
+            };
+
+            var africa = {
+                val1: 'Libi',
+                val2: 'Egypt'
+            };
+
+            var europe = {
+                val1: 'Germany',
+                val2: 'Fanland',
+                val3: 'Denmark',
+                val4: 'Biritania',
+                val5: 'Italy'
+            };
+
+            var antarctica = {
+                val1: 'Newsyland'
+            };
+
+            var australia = {
+                val1: 'Australia'
+            };
+
+            var southAmerica = {
+                val1: 'Brazil',
+                val2: 'Argantina',
+                val3: 'Mexico'
+            };
+
+            var norththAmerica = {
+                val1: 'United State of America',
+                val2: 'Canada'
+            };
+
+
+            switch ($("#Continent :selected").text()) {
+                case 'Asia':
+                    myOptions = asia;
+                    break;
+
+                case 'Europe':
+                    myOptions = europe;
+                    break;
+
+                case 'Africa':
+                    myOptions = africa;
+                    break;
+
+                case 'Antarctica':
+                    myOptions = antarctica;
+                    break;
+
+                case 'Australia':
+                    myOptions = australia;
+                    break;
+
+                case 'South America':
+                    myOptions = southAmerica;
+                    break;
+
+                case 'North America':
+                    myOptions = norththAmerica;
+                    break;
+
+                default:
+
+            }
+
+           
+            // MVC: clear all dropdown list items
+            $("#Country").empty();
+
+
+            // MVC: Add Countries to dropdown list
+            $.each(myOptions, function (val, text) {
+
+                $("#Country").append(
+
+                    $('<option></option>').val(val).text(text)
+                );
+            });
+
+            // MVC: Sort Countries dropdown list items
+            $("#Country").html($('#Country option').sort(function (x, y) {
+                return $(x).text().toUpperCase() < $(y).text().toUpperCase() ? -1 : 1;
+            }));
+
+            // MVC: selected first Country item in dropdown list
+            $('#Country > option:eq(0)').attr('selected', true);
+
+            
+            // MVC: selected first Continent item in dropdown list
+            $('#Continent > option:eq(0)').attr('selected', true);
+
+        }
+
+    </script>
+
+
+

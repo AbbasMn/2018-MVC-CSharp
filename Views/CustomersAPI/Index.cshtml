@@ -1,0 +1,159 @@
+﻿@*
+    @model IEnumerable<MVC.Models.Customer>
+    Note: I've set the model for this view to IEnumerable<Customer>.
+    This is a simple interface implemented by the list class. Since
+    in this view we only want to iterate over this list, and we don't
+    need any of the operations in the List class (eg Add, Remove, etc),
+    it's better to use the IEnumerable interface, which allows use to
+    iterate over the list. If in the future, we replace the List with a
+    different data structure, as long as it is enumerable, our view code
+    will remain unchanged.
+*@
+
+
+@model MVC.ViewModels.CustomersListViewModel
+@{
+    ViewBag.Title = "CustomersAPI";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>AllCustomers</h2>
+
+<section>
+    <article>
+        <table id="customers" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Membership Type</th>
+                    <th>Details</th>
+                    <th>Edit</th>
+                    <th>Delete with JQuery</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </article>
+</section>
+
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+
+            var table = $("#customers").DataTable({   // MVC: For use API as a source of data for each data table, we need to provide a configuration object -> // Data Tables Plug-in (Add pagination, sorting and filtering)
+
+                ajax: {
+                    url: "/api/customers",
+                    dataSrc: ""              // MVC: empty ("") because the response we get from API is an array ob objects that itself
+                                             // MVC: actuall source of data and data table doesnt need to go to another object to get it.
+                },
+                columns: [
+                    {
+                        data: "name",                                       // MVC: Column name lookig in API property names for match
+                        render: function (data, type, customer) {           // MVC: rendering each row in the table (exp: link, button, ...)
+
+                            return customer.name + " " + customer.family;
+                        }
+                    },
+
+                    {
+                        data: "membershipType.name"
+                    },
+
+                    {
+                        data: "id",
+                        render: function (data, type, customer) {
+
+                            return "<a href='/CustomersAPI/Customer/" + data + "'/>Details</a>";                            
+                        }
+                    },
+
+                    {
+                        data: "id",                                      
+                        render: function (data, type, customer) {       
+
+                            return "<a href='/CustomersAPI/Edit/" + data + "'/>Edit</a>";
+                        }
+                    },
+
+                    {
+                        data: "id",
+                        render: function (data) {
+
+                            return "<button data-customer-id=" + data + " class='btn-link js-delete'>JQuery Delete" + "</button>";
+                        }
+                    },
+
+                ]
+            });
+
+
+
+
+            $("#customers").on("click", ".js-delete", function () { // MVC: use filter for jquery optimization -> $("#customers .js-delete").on("click", function () {
+
+                var but = $(this);
+
+                bootbox.confirm({
+                    message: "Are you sure you want to delete this customer?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/api/customers/" + but.attr("data-customer-id"),
+                                method: "Delete",
+                                success: function () {
+                                    table.row(but.parents("tr")).remove().draw();  // MVC: remove item from internal list of our data table, then Bulletin data table to redraw itself
+
+                                    //but.parents("tr").remove();  // MVC: navigate or traverrs DOM until get to <tr> as button parent and then remove <tr> from DOM
+                                }
+                            });
+                        }
+                        console.log('Customer is Deleted !' + result);
+                    }
+                });
+
+
+                //bootbox.confirm("Are you sure you want to delete this customer?", function (result) {
+
+                //    if (result) {
+                //        $.ajax({
+                //            url: "/api/customers/" + but.attr("data-customer-id"),
+                //            method: "Delete",
+                //            success: function () {
+                //                //console.log("Delete Success !");
+                //                but.parents("tr").remove();  // MVC: navigate or traverrs DOM until get to <tr> as button parent and then remove <tr> from DOM
+                //            }
+                //        });
+                //    }
+                //});
+
+                //if (confirm("Are you sure you want to delete this customer?")) {
+                //    $.ajax({
+                //        url: "/api/customers/" + but.attr("data-customer-id"),
+                //        method: "Delete",
+                //        success: function () {
+                //            //console.log("Delete Success !");
+                //            but.parents("tr").remove();  // MVC: navigate or traverrs DOM until get to <tr> as button parent and then remove <tr> from DOM
+                //        }
+                //    });
+                //}
+            });
+        });
+    </script>
+
+}
+
